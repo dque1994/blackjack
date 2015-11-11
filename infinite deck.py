@@ -5,26 +5,30 @@ import numpy as np
 
 #print(random.randint(1,13))
 
-def deck(n):
-    if n not in range(14):
+#defines a variable card for a value of n between 1 and 13
+#if/elif/else structure checks 'if' condition first, then 'elif' conditions in order, then 'else' condition last
+def deck(n):                                       
+    if n not in range(14):                          #error checking for n not between 1 and 13
         print('number not in between 1 and 13')
-    elif n == 1:
+    elif n == 1:                                    #defines card as 'ace' for n = 1
         card = 'ace'
-    elif n <= 10:
+    elif n <= 10:                                   #defines card as n for 2 <= n <= 10 
         card = n
-    else:
+    else:                                           #defines card as 10 for 11, 12, or 13 (J,Q,K)
         card = 10
-    return card
+    return card                                     #returns the value of 'card'
 
+#deals a hand to the dealer and to the player
 def deal():
-    rand1 = random.randint(1,13)
+    rand1 = random.randint(1,13)                    #random integer between 1 and 13, inclusive
     rand2 = random.randint(1,13)
     rand3 = random.randint(1,13)
     rand4 = random.randint(1,13)
-    dealer = [deck(rand1),deck(rand2)]
-    player = [deck(rand3),deck(rand4)]
-    return [dealer,player]
+    dealer = [deck(rand1),deck(rand2)]              #list of cards in dealer's hand
+    player = [deck(rand3),deck(rand4)]              #list of cards in player's hand
+    return [dealer,player]                          #returns list of dealer and player's hands
 
+#logic function; takes dealer hand (list) as argument and checks 
 def dealer_logic(hand):
     dealer_hand = hand
     if (dealer_hand[0] == 'ace') and (dealer_hand[1] == 'ace'):
