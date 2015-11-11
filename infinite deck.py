@@ -6,6 +6,7 @@ import numpy as np
 #print(random.randint(1,13))
 
 #defines a variable card for a value of n between 1 and 13
+#'ace' is a string; 2 through 10 are numeric
 #if/elif/else structure checks 'if' condition first, then 'elif' conditions in order, then 'else' condition last
 def deck(n):                                       
     if n not in range(14):                          #error checking for n not between 1 and 13
@@ -28,33 +29,32 @@ def deal():
     player = [deck(rand3),deck(rand4)]              #list of cards in player's hand
     return [dealer,player]                          #returns list of dealer and player's hands
 
-#logic function; takes dealer hand (list) as argument and checks 
+#logic function; takes dealer hand (list) as argument and checks if dealer has an ace; if dealer has an ace, his hand is soft
+#and he would be required to hit if his intitial hand is 17. 'soft' is a Boolean variable (True or False). 'total' is a numerical
+#value equal to the value of the dealer's hand. 'stay', 'hitsoft', and 'hit' are strings
 def dealer_logic(hand):
     dealer_hand = hand
-    if (dealer_hand[0] == 'ace') and (dealer_hand[1] == 'ace'):
+    if (dealer_hand[0] == 'ace') and (dealer_hand[1] == 'ace'):     #if both cards are aces, one must be worth 11 and the other must be worth 1
         soft = True
         dealer_hand[0] = 11
         dealer_hand[1] = 1
 
-    if dealer_hand[0] == 'ace':
+    if dealer_hand[0] == 'ace':             #if first card is an ace, set 'soft' equal to True and assign a value of 11 to the ace
         soft = True
         dealer_hand[0] = 11
-    elif dealer_hand[1] == 'ace':
+    elif dealer_hand[1] == 'ace':           #if first card is not an ace but second card is, set 'soft' equal to True and assign a value of 11 to the ace
         soft = True
         dealer_hand[1] = 11
-    else:
+    else:                                   #if dealer doesn't have an ace, set 'soft' equal to False
         soft = False
 
-
-
-
-    total = dealer_hand[0]+dealer_hand[1]
-    if total >= 17:
+    total = dealer_hand[0]+dealer_hand[1]   #sums the value of the two cards in the dealer's hand
+    if total >= 17:                         #if 'total' is greater than or equal to 17, dealer must stay. return string 'stay' and numeric 'total'
         return ('stay',total)
-    else:
-        if soft == True:
+    else:                                   #else ('total' is less than 17)
+        if soft == True:                        #if 'soft' is True(i.e., dealer has an ace) return string 'hitsoft' and numeric 'total' 
             return ('hitsoft',total)
-        else:
+        else:                                   #else (dealer doesn't have an ace) return string 'hit' and numeric 'total'
             return ('hit',total)
 
 
