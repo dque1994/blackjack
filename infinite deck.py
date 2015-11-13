@@ -175,12 +175,33 @@ for i in range(18):
             dealer_score = play_a_hand_dealer([deck(j+1),deck(random.randint(1,13))])
             if dealer_score == 'bust':
                 dealer_score = 0
-            if player_score > dealer_score:
-                win_array[i][j] += 1
-            elif player_score == dealer_score:
-                push_array[i][j] += 1
+            if (10 in dealer_hand) and ('ace' in dealer_hand):
+                dealer_blackjack = True
             else:
+                dealer_blackjack = False
+                
+            if player_score == 21:
+                player_blackjack = True
+            else:
+                player_blackjack = False
+                
+            if (dealer_blackjack == False) and (player_blackjack == False):
+            
+                if player_score > dealer_score:
+                    win_array[i][j] += 1
+                elif player_score == dealer_score:
+                    push_array[i][j] += 1
+                else:
+                    lose_array[i][j] += 1
+            
+            elif (dealer_blackjack == False) and (player_blackjack == True):
+                win_array[i][j] += 1
+                
+            elif (dealer_blackjack == True) and (player_blackjack == False):
                 lose_array[i][j] += 1
+            
+            else:
+                push_array[i][j] += 1
 
 # print(win_array)
 # print(push_array)
