@@ -5,7 +5,7 @@ import numpy as np
 
 #print(random.randint(1,13))
 
-#defines a variable card for a value of n between 1 and 13
+#returns a variable 'card' for a value of n between 1 and 13
 #'ace' is a string; 2 through 10 are numeric
 #if/elif/else structure checks 'if' condition first, then 'elif' conditions in order, then 'else' condition last
 def deck(n):                                       
@@ -105,6 +105,7 @@ def hit_loop(total):
             return hit_loop(card_total)
 
 #simulates a hand for the dealer; dealer must hit on 16 and below, as well as on soft 17 (ace and a 6)
+#takes as an argument a 2-element list comprised of the dealer's 2 cards
 def play_a_hand_dealer(hand):                   #'hand' is the dealer's hand
     logic = dealer_logic(hand)                  #calls dealer_logic() on 'hand' and sets it equal to a variable 'logic'
     if logic[0] == 'stay':                      #if dealer has to stay, return logic[1], which is the value of the hand
@@ -164,19 +165,29 @@ for row in trans_array:                 #iterates over each row in 'trans_array'
 
 print(normal_trans)                 #print the normalized array
 
-win_array = np.zeros((18,13))
+
+#The following produces tables that show the calculated probabilities of a player winning, pushing, and losing against the dealer.
+#Losing in this case means either a bust, or finishing with a score lower than the dealer.
+#The first table shows the probabilities of winning, pushing, and losing when a player doesn't hit after the initial deal; the
+#second table shows the same probabilites if a player hits once on their initial hand
+
+#create three 18x13 arrays; one each to contain the probabilities of winning, pushing, and losing. Each array has 18 rows to account 
+#for the 18 different possible scores, and 13 columns to account for the 13 possible cards to receive on a hit
+win_array = np.zeros((18,13))       
 push_array = np.zeros((18,13))
 lose_array = np.zeros((18,13))
 
-for i in range(18):
-    for j in range(13):
-        for k in range(10000):
-            player_score = i+4
-            dealer_score = play_a_hand_dealer([deck(j+1),deck(random.randint(1,13))])
-            if dealer_score == 'bust':
+#Populate the win, push, and lose arrays with the number of instances of each occurence for every combination of player and
+#dealer hands
+for i in range(18):             #controls the player scores
+    for j in range(13):             #controls the dealer scores
+        for k in range(10000):          #runs 10000 trials for each combination of player and dealer hands
+            player_score = i+4              #i runs from 0 to 17, so player score will run from 4 to 21
+            dealer_score = play_a_hand_dealer([deck(j+1),deck(random.randint(1,13))])   #calls play_a_hand_dealer() on the 2-element list comprised of calling deck() on j+1 and calling deck on a random integer from 1 to 13, and assigns it to new variable 'dealer_score'
+            if dealer_score == 'bust':      
                 dealer_score = 0
-            if (10 in dealer_hand) and ('ace' in dealer_hand):
-                dealer_blackjack = True
+            if (10 in dealer_hand) and ('ace' in dealer_hand):  #checks if dealer has blackjack; if so, 
+                dealer_blackjack = True                             
             else:
                 dealer_blackjack = False
                 
@@ -247,8 +258,8 @@ for line in lose_norm:
         h.write(string)
     h.write('\n')
     
-cards_under = [1,2,3,4,5,6,7,8,9,10,10,10,10]
-cards_over = [11,2,3,4,5,6,7,8,9,10,10,10,10]
+cards_under = [1,2,3,4,5,6,7,8,9,10,10,10,10] #cards under 11
+cards_over = [11,2,3,4,5,6,7,8,9,10,10,10,10] #cards over 11
 
 
 win_hit_array = np.zeros((18,13))
