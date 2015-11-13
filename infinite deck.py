@@ -163,3 +163,120 @@ for row in trans_array:                 #iterates over each row in 'trans_array'
     i += 1                          #increment i by 1
 
 print(normal_trans)                 #print the normalized array
+
+win_array = np.zeros((18,13))
+push_array = np.zeros((18,13))
+lose_array = np.zeros((18,13))
+
+for i in range(18):
+    for j in range(13):
+        for k in range(10000):
+            player_score = i+4
+            dealer_score = play_a_hand_dealer([deck(j+1),deck(random.randint(1,13))])
+            if dealer_score == 'bust':
+                dealer_score = 0
+            if player_score > dealer_score:
+                win_array[i][j] += 1
+            elif player_score == dealer_score:
+                push_array[i][j] += 1
+            else:
+                lose_array[i][j] += 1
+
+# print(win_array)
+# print(push_array)
+# print(lose_array)
+
+win_norm = np.zeros((18,13))
+push_norm = np.zeros((18,13))
+lose_norm = np.zeros((18,13))
+
+for l in range(18):
+    for m in range(13):
+        total = win_array[l][m]+lose_array[l][m]+push_array[l][m]
+        win_norm[l][m] = win_array[l][m]/total
+        push_norm[l][m] = push_array[l][m]/total
+        lose_norm[l][m] = lose_array[l][m]/total
+
+print(win_norm)
+print(push_norm)
+print(lose_norm)
+
+
+f = open('win_probs_no_hit.txt','w')
+f.write("Probabilities of Winning (rows represent total of player's cards (4-21), columns represent card dealer shows (ace,2,...,king)"+'\n')
+for line in win_norm:
+    for element in line:
+        string = str(element)+'\t'
+        f.write(string)
+    f.write('\n')
+
+g = open('push_probs_no_hit.txt','w')
+g.write("Probabilities of Pushing (rows represent total of player's cards (4-21), columns represent card dealer shows (ace,2,...,king)"+'\n')
+for line in push_norm:
+    for element in line:
+        string = str(element)+'\t'
+        g.write(string)
+    g.write('\n')
+
+h = open('lose_probs_no_hit.txt','w')
+h.write("Probabilities of Losing (rows represent total of player's cards (4-21), columns represent card dealer shows (ace,2,...,king)"+'\n')
+for line in lose_norm:
+    for element in line:
+        string = str(element)+'\t'
+        h.write(string)
+    h.write('\n')
+    
+cards_under = [1,2,3,4,5,6,7,8,9,10,10,10,10]
+cards_over = [11,2,3,4,5,6,7,8,9,10,10,10,10]
+
+
+win_hit_array = np.zeros((18,13))
+push_hit_array = np.zeros((18,13))
+lose_hit_array = np.zeros((18,13))
+
+for i in (4,5,6,7,8,9,10):
+    for card in cards_over:
+        new_total = i+card
+        win_hit_array[i-4] += (1/13)*win_norm[new_total-4]
+        push_hit_array[i-4] += (1/13)*push_norm[new_total-4]
+        lose_hit_array[i-4] += (1/13)*lose_norm[new_total-4]
+
+for i in (11,12,13,14,15,16,17,18,19,20,21):
+    for card in cards_under:
+        new_total = i+card
+        if new_total <= 21:
+            win_hit_array[i-4] += (1/13)*win_norm[new_total-4]
+            push_hit_array[i-4] += (1/13)*push_norm[new_total-4]
+            lose_hit_array[i-4] += (1/13)*lose_norm[new_total-4]
+        else:
+            win_hit_array[i-4] += 0
+            push_hit_array[i-4] += 0
+            lose_hit_array[i-4] += (1/13)
+
+# print(win_hit_array)
+# print(push_hit_array)
+# print(lose_hit_array)
+
+f2 = open('win_probs_hit.txt','w')
+f2.write("Probabilities of Winning After Hit (rows represent total of player's cards (4-21), columns represent card dealer shows (ace,2,...,king)"+'\n')
+for line in win_hit_array:
+    for element in line:
+        string = str(element)+'\t'
+        f2.write(string)
+    f2.write('\n')
+
+g2 = open('push_probs_hit.txt','w')
+g2.write("Probabilities of Pushing After Hit (rows represent total of player's cards (4-21), columns represent card dealer shows (ace,2,...,king)"+'\n')
+for line in push_hit_array:
+    for element in line:
+        string = str(element)+'\t'
+        g2.write(string)
+    g2.write('\n')
+
+h2 = open('lose_probs_hit.txt','w')
+h2.write("Probabilities of Losing After Hit (rows represent total of player's cards (4-21), columns represent card dealer shows (ace,2,...,king)"+'\n')
+for line in lose_hit_array:
+    for element in line:
+        string = str(element)+'\t'
+        h2.write(string)
+    h2.write('\n')
