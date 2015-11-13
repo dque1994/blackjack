@@ -57,65 +57,69 @@ def dealer_logic(hand):
         else:                                   #else (dealer doesn't have an ace) return string 'hit' and numeric 'total'
             return ('hit',total)
 
-
+#loop that simulates hitting on a soft hand; this function is called later in the hit_loop() and play_a_hand_dealer() functions;
+#first checks value of the next card drawn, then checks the total value of the player's hand
 def hit_soft_loop(total):
-    card_total = total
-    randcard = deck(random.randint(1,13))
-    if randcard == 'ace':
-        card_total += 1
-    else:
+    card_total = total                          #'card_total' is a placeholder variable that takes the intial value of 'total'; it's the player's score
+    randcard = deck(random.randint(1,13))       #'randcard' is a random value, either 'ace' or an integer from 2-10, resulting from calling deck()
+    if randcard == 'ace':                       #if 'randcard' is an ace, increment 'card_total' by 1
+        card_total += 1                     
+    else:                                       #else increment 'card_total' by the value of 'randcard'
         card_total += randcard
-    if card_total > 21:
-        return (card_total-10)
-    elif card_total >= 17:
-        return card_total
-    else:
+    if card_total > 21:                         #if 'card_total' is greater than 21, the ace already in the hand takes a value of 1,
+        return (card_total-10)                  #so return 10 less than 'card_total'
+    elif card_total >= 17:                      #elif 'card_total' is >= 17 (and <= 21) return the straight up value of 'card_total'
+        return card_total       
+    else:                                       #else, iterate through the loop again
         return hit_soft_loop(card_total)
 
+#loop that simulates a hit; this function is called later in the play_a_hand_dealer() function
+#continues to hit until the hand is between 17 and 21 inclusive, or a bust
 def hit_loop(total):
-    card_total = total
-    randcard = deck(random.randint(1,13))
-    if randcard == 'ace':
-        if card_total > 10:
-            card_total += 1
-            if 17 <= card_total <= 21:
+    card_total = total                          #'card_total' is a placeholder variable that takes the initial value of 'total'; it's the player's score
+    randcard = deck(random.randint(1,13))       #'randcard' is a random value, either 'ace' or an integer from 2-10, resulting from calling deck() 
+    if randcard == 'ace':                       #check if 'randcard' is an ace. if so:
+        if card_total > 10:                         #if 'card_total' is greater than 10, increment by 1
+            card_total += 1         
+            if 17 <= card_total <= 21:                  #if 'card_total' is between 17 and 21, inclusive, return 'card_total'
                 return card_total
-            else:
+            else:                                       #else iterate through hit_loop() again
                 return hit_loop(card_total)
-        else:
+        else:                                       #else increment 'card_total' by 11
             card_total += 11
-            if 17 <= card_total <= 21:
+            if 17 <= card_total <= 21:                  #if 'card_total' is between 17 and 21, inclusive, return 'card_total'
                 return card_total
-            else:
+            else:                                   #else (if card_total < 17) create a new variable 'new_total' and set it equal to the value returned by hit_soft_loop() with argument 'card_total' (hit on a soft hand)
                 new_total = hit_soft_loop(card_total)
-                if 17 <= new_total <=21:
+                if 17 <= new_total <=21:                #if 'new_total' is between 17 and 21 inclusive, return 'new_total'
                     return new_total
-                else:
+                else:                                   #else iterate through hit_loop() again, this time with argument 'new_total'
                     return hit_loop(new_total)
-    else:
+    else:                                       #else increment 'card_total' by the value of 'randcard'
         card_total += randcard
-        if 17 <= card_total <= 21:
+        if 17 <= card_total <= 21:                  #if 'card_total' is between 17 and 21 inclusive, return 'card_total'
             return card_total
-        elif card_total > 21:
+        elif card_total > 21:                       #elif 'card_total' is greater than 21, bust
             return 'bust'
-        else:
+        else:                                       #else iterate through hit_loop again, this time with 'card_total' as the argument
             return hit_loop(card_total)
 
-def play_a_hand_dealer(hand):
-    logic = dealer_logic(hand)
-    if logic[0] == 'stay':
+#simulates a hand for the dealer; dealer must hit on 16 and below, as well as on soft 17 (ace and a 6)
+def play_a_hand_dealer(hand):                   #'hand' is the dealer's hand
+    logic = dealer_logic(hand)                  #calls dealer_logic() on 'hand' and sets it equal to a variable 'logic'
+    if logic[0] == 'stay':                      #if dealer has to stay, return logic[1], which is the value of the hand
         return logic[1]
-    elif logic[0] == 'hitsoft':
-        no_soft = hit_soft_loop(logic[1])
-        if no_soft >= 17:
+    elif logic[0] == 'hitsoft':                 #elif dealer has a soft hand and is required to hit, begin that process
+        no_soft = hit_soft_loop(logic[1])           #call hit_soft_loop() on the current value of the hand and set it equal to new variable 'no_soft'
+        if no_soft >= 17:                           #if 'no_soft' is greater than or equal to 17, return 'no_soft' 
             return no_soft
-        else:
-            dealer = hit_loop(no_soft)
-            return dealer
+        else:                                       #else call hit_loop() on 'no_soft' and set it equal to new variable 'dealer'
+            dealer = hit_loop(no_soft)              
+            return dealer                               #return 'dealer'
 
-    else:
-        dealer = hit_loop(logic[1])
-        return dealer
+    else:                                       #else call hit_loop() on logic[1], which is the value of the hand
+        dealer = hit_loop(logic[1])             #set it equal to new variable 'dealer'
+        return dealer                           #return 'dealer'
 
 
 #print(hit_loop(5))
