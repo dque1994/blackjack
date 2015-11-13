@@ -130,31 +130,36 @@ def play_a_hand_dealer(hand):                   #'hand' is the dealer's hand
 #    dealer = deal()[0]
 #    play_a_hand_dealer(dealer)
 
-trans_array = np.zeros((18,3))
-for i in range(18):
-    for j in range(10000):
-        player_score = i+4
-        dealer_hand = deal()[0]
-        dealer_score = play_a_hand_dealer(dealer_hand)
-        if dealer_score == 'bust':
+trans_array = np.zeros((18,3))          #creates an 18 x 3 array of zeroes
+
+#monte carlo simulation, runs 10000 trials for every score from 4 to 21 and populates 'trans_array' instances of winning, pushing, and losing (from the player's perspective)
+#column 0 = player win, column 1 = push, column 2 = player loss
+for i in range(18):                                         #for every i from 0 to 17 inclusive:
+    for j in range(10000):                                      #for every j from 0 to 9999 inclusive
+        player_score = i+4                                          #set 'player_hand' equal to i+4
+        dealer_hand = deal()[0]                                     #call deal() and set 'dealer_hand' equal to the 'dealer' value returned by 'deal'
+        dealer_score = play_a_hand_dealer(dealer_hand)              #call play_a_hand_dealer() on 'dealer_hand', set it equal to 'dealer_score'
+        if dealer_score == 'bust':                                  #if 'dealer_score' is a bust, reset 'dealer_score' to 0
             dealer_score = 0
-        if player_score > dealer_score:
+        if player_score > dealer_score:                             #if player_score is greater than dealer_score, increment the 'i'th row of column 0 by 1
             trans_array[i][0] += 1
-        elif player_score == dealer_score:
+        elif player_score == dealer_score:                          #elif 'player_score' is equal to 'dealer_score', increment the 'i'th row of column 1 by 1
             trans_array[i][1] += 1
-        else:
+        else:                                                       #else, increment the 'i'th row of column 2 by 1
             trans_array[i][2] += 1
 
-normal_trans = np.zeros((18,3))
-i = 0
-for row in trans_array:
-    row_sum = 0
-    for elements in row:
-        row_sum += elements
-    j = 0
-    for element in row:
-        normal_trans[i][j] = element/row_sum
-        j += 1
-    i += 1
+normal_trans = np.zeros((18,3))         #creates an 18 x 3 array of zeroes
 
-print(normal_trans)
+#normalize 'trans_array'
+i = 0                                   #initialize i as 0
+for row in trans_array:                 #iterates over each row in 'trans_array'
+    row_sum = 0                             #set 'row_sum' = 0 at the beginning of each iteration
+    for elements in row:                    #calculate the sum of the row elements (wins, pushes, and losses)
+        row_sum += elements
+    j = 0                               #initialize j as 0
+    for element in row:                 #divide each element in each row by the row sum to normalize the array
+        normal_trans[i][j] = element/row_sum
+        j += 1                          #increment j by 1
+    i += 1                          #increment i by 1
+
+print(normal_trans)                 #print the normalized array
