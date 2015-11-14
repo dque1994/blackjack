@@ -139,7 +139,7 @@ for i in range(18):                                         #for every i from 0 
     for j in range(10000):                                      #for every j from 0 to 9999 inclusive
         player_score = i+4                                          #set 'player_hand' equal to i+4
         dealer_hand = deal()[0]                                     #call deal() and set 'dealer_hand' equal to the 'dealer' value returned by 'deal'
-        dealer_score = play_a_hand_dealer(dealer_hand)              #call play_a_hand_dealer() on 'dealer_hand', set it equal to 'dealer_score'
+        dealer_score = play_a_hand_dealer(dealer_hand)              #plays a hand on the dealer's current hand, sets it equal to 'dealer_score'
         if dealer_score == 'bust':                                  #if 'dealer_score' is a bust, reset 'dealer_score' to 0
             dealer_score = 0
         if player_score > dealer_score:                             #if player_score is greater than dealer_score, increment the 'i'th row of column 0 by 1
@@ -183,34 +183,36 @@ for i in range(18):             #controls the player scores
     for j in range(13):             #controls the dealer scores
         for k in range(10000):          #runs 10000 trials for each combination of player and dealer hands
             player_score = i+4              #i runs from 0 to 17, so player score will run from 4 to 21
-            dealer_score = play_a_hand_dealer([deck(j+1),deck(random.randint(1,13))])   #calls play_a_hand_dealer() on the 2-element list comprised of calling deck() on j+1 and calling deck on a random integer from 1 to 13, and assigns it to new variable 'dealer_score'
-            if dealer_score == 'bust':      
+            dealer_score = play_a_hand_dealer([deck(j+1),deck(random.randint(1,13))])   #plays a hand on the dealer's current hand of j+1 and a random value 1 - 13
+            if dealer_score == 'bust':      #if playing a hand causes the dealer to bust, set 'dealer_score' equal to 0
                 dealer_score = 0
-            if (10 in dealer_hand) and ('ace' in dealer_hand):  #checks if dealer has blackjack; if so, 
+            if (10 in dealer_hand) and ('ace' in dealer_hand):  #checks if dealer has blackjack
                 dealer_blackjack = True                             
             else:
                 dealer_blackjack = False
                 
-            if player_score == 21:
+            if player_score == 21:                              #checks if player has blackjack
                 player_blackjack = True
             else:
                 player_blackjack = False
                 
-            if (dealer_blackjack == False) and (player_blackjack == False):
+        #runs through possible combinations of dealer and players having blackjack
+            #if neither player nor dealer has blackjack, check who wins and increment the appropriate array by 1
+            if (dealer_blackjack == False) and (player_blackjack == False): 
             
-                if player_score > dealer_score:
+                if player_score > dealer_score:     
                     win_array[i][j] += 1
                 elif player_score == dealer_score:
                     push_array[i][j] += 1
                 else:
                     lose_array[i][j] += 1
-            
+            #elif player has blackjack but dealer doesn't, increment 'win_array' by 1
             elif (dealer_blackjack == False) and (player_blackjack == True):
                 win_array[i][j] += 1
-                
+            #elif dealer has blackjack but player doesn't, increment 'lose_array' by 1    
             elif (dealer_blackjack == True) and (player_blackjack == False):
                 lose_array[i][j] += 1
-            
+            #else (if player and dealer both have blackjack), increment 'push_array' by 1
             else:
                 push_array[i][j] += 1
 
@@ -218,6 +220,7 @@ for i in range(18):             #controls the player scores
 # print(push_array)
 # print(lose_array)
 
+#creates framework for normalized win, lose, and pus arrays
 win_norm = np.zeros((18,13))
 push_norm = np.zeros((18,13))
 lose_norm = np.zeros((18,13))
