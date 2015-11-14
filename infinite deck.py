@@ -168,8 +168,8 @@ print(normal_trans)                 #print the normalized array
 
 #The following produces tables that show the calculated probabilities of a player winning, pushing, and losing against the dealer.
 #Losing in this case means either a bust, or finishing with a score lower than the dealer.
-#The first table shows the probabilities of winning, pushing, and losing when a player doesn't hit after the initial deal; the
-#second table shows the same probabilites if a player hits once on their initial hand
+#The first section of code, through line 264, calculates the probabilities of winning, pushing, and losing when a player doesn't hit after the initial deal
+#and writes the results to separate .txt files
 
 #create three 18x13 arrays; one each to contain the probabilities of winning, pushing, and losing. Each array has 18 rows to account 
 #for the 18 different possible scores, and 13 columns to account for the 13 possible cards to receive on a hit
@@ -225,18 +225,20 @@ win_norm = np.zeros((18,13))
 push_norm = np.zeros((18,13))
 lose_norm = np.zeros((18,13))
 
-for l in range(18):
-    for m in range(13):
-        total = win_array[l][m]+lose_array[l][m]+push_array[l][m]
-        win_norm[l][m] = win_array[l][m]/total
-        push_norm[l][m] = push_array[l][m]/total
-        lose_norm[l][m] = lose_array[l][m]/total
+#calculate the sum of the possible outcomes (win, push, lose) in each array. Divide each element by the sum of its row to normalize the arrays
+for l in range(18):         #l corresponds to each row in the arrays
+    for m in range(13):         #m corresponds to each column in the arrays
+        total = win_array[l][m]+lose_array[l][m]+push_array[l][m]   #calculate outcome totals (sum of position [l][m] in each array)
+        win_norm[l][m] = win_array[l][m]/total                      #calculate probablilty of winning at position [l][m]
+        push_norm[l][m] = push_array[l][m]/total                    #calculate probability of pushing at position [l][m]
+        lose_norm[l][m] = lose_array[l][m]/total                    #calculate probability of losing at position [l][m]
 
-print(win_norm)
+#print the normalized arrays
+print(win_norm) 
 print(push_norm)
 print(lose_norm)
 
-
+#the next several blocks of code write the arrays to .txt files
 f = open('win_probs_no_hit.txt','w')
 f.write("Probabilities of Winning (rows represent total of player's cards (4-21), columns represent card dealer shows (ace,2,...,king)"+'\n')
 for line in win_norm:
@@ -260,15 +262,18 @@ for line in lose_norm:
         string = str(element)+'\t'
         h.write(string)
     h.write('\n')
-    
-cards_under = [1,2,3,4,5,6,7,8,9,10,10,10,10] #cards under 11
-cards_over = [11,2,3,4,5,6,7,8,9,10,10,10,10] #cards over 11
 
+#Next section of code calculates the probabilities of winning, pushing, and losing when a player hits on his hand and writes the results to separate .txt files    
+cards_under = [1,2,3,4,5,6,7,8,9,10,10,10,10] #array representing possible cards for a player to have, treating an ace as a 1
+cards_over = [11,2,3,4,5,6,7,8,9,10,10,10,10] #array representing possible cards for a player to have, treating an ace as an 11
 
+#create three 18x13 arrays; one each to contain the probabilities of winning, pushing, and losing after a player hits. 
+#Each array has 18 rows to account for the 18 different possible scores, and 13 columns to account for the 13 possible cards to receive on a hit
 win_hit_array = np.zeros((18,13))
 push_hit_array = np.zeros((18,13))
 lose_hit_array = np.zeros((18,13))
 
+#for any hand under 11, calculates the probability of winning, pushing, losing 
 for i in (4,5,6,7,8,9,10):
     for card in cards_over:
         new_total = i+card
