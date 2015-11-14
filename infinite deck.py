@@ -220,7 +220,7 @@ for i in range(18):             #controls the player scores
 # print(push_array)
 # print(lose_array)
 
-#creates framework for normalized win, lose, and pus arrays
+#creates framework for normalized win, lose, and push arrays
 win_norm = np.zeros((18,13))
 push_norm = np.zeros((18,13))
 lose_norm = np.zeros((18,13))
