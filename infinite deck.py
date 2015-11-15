@@ -1,9 +1,8 @@
-__author__ = 'miller'
+__author__ = 'miller'           #codebase authored by James Miller, Esq. 
 
-import random
-import numpy as np
+import random                   #module containing several types of random number generators
+import numpy as np              #package for performing scientific computation in Python
 
-#print(random.randint(1,13))
 
 #returns a variable 'card' for a value of n between 1 and 13
 #'ace' is a string; 2 through 10 are numeric
