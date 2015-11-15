@@ -264,8 +264,8 @@ for line in lose_norm:
     h.write('\n')
 
 #Next section of code calculates the probabilities of winning, pushing, and losing when a player hits on his hand and writes the results to separate .txt files    
-cards_under = [1,2,3,4,5,6,7,8,9,10,10,10,10] #array representing possible cards for a player to have, treating an ace as a 1
-cards_over = [11,2,3,4,5,6,7,8,9,10,10,10,10] #array representing possible cards for a player to have, treating an ace as an 11
+cards_under = [1,2,3,4,5,6,7,8,9,10,10,10,10] #array representing possible cards for a player to have, treating an ace as a 1 (so player's current hand is >= 11)
+cards_over = [11,2,3,4,5,6,7,8,9,10,10,10,10] #array representing possible cards for a player to have, treating an ace as an 11 (so player's current hand is < 11)
 
 #create three 18x13 arrays; one each to contain the probabilities of winning, pushing, and losing after a player hits. 
 #Each array has 18 rows to account for the 18 different possible scores, and 13 columns to account for the 13 possible cards to receive on a hit
@@ -273,21 +273,27 @@ win_hit_array = np.zeros((18,13))
 push_hit_array = np.zeros((18,13))
 lose_hit_array = np.zeros((18,13))
 
-#for any hand under 11, calculates the probability of winning, pushing, losing 
-for i in (4,5,6,7,8,9,10):
-    for card in cards_over:
-        new_total = i+card
-        win_hit_array[i-4] += (1/13)*win_norm[new_total-4]
+#for any hand under 11, calculates the probability of winning, pushing, losing if the player hits
+for i in (4,5,6,7,8,9,10):                                      #all possible hands less than 11
+    for card in cards_over:                                     
+        new_total = i+card                                      #new total after simulated hit
+        #the [i-4] adjusts to match i with appropriate row in the array. Multiplies current entry at [new_total-4] of each normalized array 
+        #by 1/13 to generate new probabilities of winning, pushing, and losing
+        win_hit_array[i-4] += (1/13)*win_norm[new_total-4]       
         push_hit_array[i-4] += (1/13)*push_norm[new_total-4]
         lose_hit_array[i-4] += (1/13)*lose_norm[new_total-4]
 
-for i in (11,12,13,14,15,16,17,18,19,20,21):
+#for any hand over 11, calculates the probability of winning, pushing, losing if the player hits
+for i in (11,12,13,14,15,16,17,18,19,20,21):                    #all possible hands 11 or higher
     for card in cards_under:
-        new_total = i+card
+        new_total = i+card                                      #new total after simulated hit
+        #if 'new_total' isn't a bust, multiply current entry at [new_total - 4] of each normalized array by 1/13 to generate new probabilities
+        #of winning, pushing, losing
         if new_total <= 21:
             win_hit_array[i-4] += (1/13)*win_norm[new_total-4]
             push_hit_array[i-4] += (1/13)*push_norm[new_total-4]
             lose_hit_array[i-4] += (1/13)*lose_norm[new_total-4]
+        #else (if 'new_total' is a bust), don't change 'win_hit_array' or 'push_hit_array', and increment 'lose_hit_aray' by 1/13
         else:
             win_hit_array[i-4] += 0
             push_hit_array[i-4] += 0
@@ -297,6 +303,7 @@ for i in (11,12,13,14,15,16,17,18,19,20,21):
 # print(push_hit_array)
 # print(lose_hit_array)
 
+#Writes each '<result>_hit_array' to a .txt file
 f2 = open('win_probs_hit.txt','w')
 f2.write("Probabilities of Winning After Hit (rows represent total of player's cards (4-21), columns represent card dealer shows (ace,2,...,king)"+'\n')
 for line in win_hit_array:
