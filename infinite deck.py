@@ -326,3 +326,21 @@ for line in lose_hit_array:
         string = str(element)+'\t'
         h2.write(string)
     h2.write('\n')
+
+#Next section calculates probabilities of winning, pushing, and losing if a player splits his hand.
+#A player can split his hand when they are dealt two of the same card at the start of the hand. The player then has two separate hands,
+#and receives a card on top of each of the split cards. The player then plays each hand like a normal hand. 
+#If a player splits on a pair of aces, they only receive one additional card per ace, so each ace is an 11 by defaul.
+#Should a player split their cards and receive another of the same card on either split hand, the player may split again, and 
+#continue to split as long as they keep receiving the same card.
+
+win_split_array = np.zeros((18,13))
+push_split_array = np.zeros((18,13))
+lose_split_array = np.zeros((18,13))
+
+for i in range(10):                      #10 cards from 2 to ace (as 11)
+    for j in range(13):                  #controls dealer score
+        for k in range(10000):
+            player_hand_1 = [i+2,deck(random.randint(1,13))]
+            player_hand_2 = [i+2,deck(random.randint(1,13))]
+            dealer_score = play_a_hand_dealer([deck(j+1),deck(random.randint(1,13))])
