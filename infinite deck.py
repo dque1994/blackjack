@@ -343,20 +343,58 @@ s_lose_lose_split_array = np.zeros((10,13))
 #CONSIDER DEALER BLACKJACK
 
 for i in (2,3,4,5,6,7,8,9,10,11):                      #10 cards from 2 to ace (as 11)
-    for j in range(13):                  #controls dealer score
+    for j in range(13):                                #controls dealer score
         for k in range(10000):
             player_score_1 = i+deck(random.randint(1,13))
             player_score_2 = i+deck(random.randint(1,13))
             dealer_score = play_a_hand_dealer([deck(j+1),deck(random.randint(1,13))])
-            if player_score_1 > dealer_score and player_score_2 > dealer_score:
+            if (10 in dealer_hand) and ('ace' in dealer_hand):
+                dealer_blackjack == True
+            else:
+                dealer_blackjack == False
+            if player_score_1 == 21:
+                player_blackjack_1 == True
+            else:
+                player_blackjack_1 == False
+            if player_score_2 == 21:
+                player_blackjack_2 == True
+            else:
+                player_blackjack_2 == False
+            if (dealer_blackjack == False) and ((player_blackjack_1 == False) and (player_blackjack_2 == False)):
+                if (player_score_1 > dealer_score) and (player_score_2 > dealer_score):
+                    s_win_win_split_array[i-2][j] += 1
+                elif ((player_score_1 > dealer_score) and (player_score_2 == dealer_score)) or ((player_score_1 == dealer_score) and (player_score_2 > dealer_score)):
+                    s_win_push_split_array[i-2][j] += 1
+                elif (player_score_1 == dealer_score) and (player_score_2 == dealer_score):
+                    s_push_push_split_array[i-2][j] += 1
+                elif ((player_score_1 < dealer_score) and (player_score_2 == dealer_score)) or ((player_score_1 == dealer_score) and (player_score_2 < dealer_score)):
+                    s_push_lose_split_array[i-2][j] += 1
+                else:
+                    s_lose_lose_split_array[i-2][j] += 1
+            elif (dealer_blackjack == False) and ((player_blackjack_1 == True) and (player_blackjack_2 == False)):
+                if player_score_2 > dealer_score:
+                    s_win_win_split_array[i-2][j] += 1
+                elif player_score_2 == dealer_score:
+                    s_win_push_array[i-2][j] += 1
+                else:
+                    s_push_push_array[i-2][j] += 1
+            elif (dealer_blackjack == False) and ((player_blackjack_1 == False) and (player_blackjack_2 == True)):
+                if player_score_1 > dealer_score:
+                    s_win_win_split_array[i-2][j] += 1
+                elif player_score_1 == dealer_score:
+                    s_win_push_array[i-2][j] += 1
+                else:
+                    s_push_push_array[i-2][j] += 1                
+            elif (dealer_blackjack == False) and ((player_blackjack_1 == True) and (player_blackjack_2 == True)):
                 s_win_win_split_array[i-2][j] += 1
-            elif (player_score_1 > dealer_score and plyer_score_2 == dealer-score) or player_score_1 == dealer_score and player_score_2 > dealer_score):
-                s_win_push_split_array[i-2][j] += 1
-            elif player_score_1 == dealer_score and player_score_2 == dealer_score:
-                s_push_push_split_array[i-2][j] += 1
-            elif (player_score_1 < dealer_score and player_score_2 == dealer_score) or (player_score_1 == dealer_score and player_score_2 < dealer_score):
+            elif (dealer_blackjack == True) and ((player_blackjack_1 == False) and (player_blackjack_2 == False)):
+                s_lose_lose_split_array[i-2][j] += 1
+            elif (dealer_blackjack == True) and ((player_blackjack_1 == True) and (player_blackjack_2 == False)):
+                s_push_lose_split_array[i-2][j] += 1
+            elif (dealer_blackjack == True) and ((player_blackjack_1 == False) and (player_blackjack_2 == True)):
                 s_push_lose_split_array[i-2][j] += 1
             else:
-                s_lose_lose_split_array[i-2][j] += 1
+                s_push_push_split_array[i-2][j] += 1
+                
             
                 
