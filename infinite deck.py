@@ -340,8 +340,6 @@ s_push_push_split_array = np.zeros((10,13))
 s_push_lose_split_array = np.zeros((10,13))
 s_lose_lose_split_array = np.zeros((10,13))
 
-#CONSIDER DEALER BLACKJACK
-
 for i in (2,3,4,5,6,7,8,9,10,11):                      #10 cards from 2 to ace (as 11)
     for j in range(13):                                #controls dealer score
         for k in range(10000):
@@ -396,5 +394,63 @@ for i in (2,3,4,5,6,7,8,9,10,11):                      #10 cards from 2 to ace (
             else:
                 s_push_push_split_array[i-2][j] += 1
                 
-            
-                
+s_ww_norm = np.zeros((10,13))
+s_wp_norm = np.zeros((10,13))
+s_pp_norm = np.zeros((10,13))
+s_pl_norm = np.zeros((10,13))
+s_ll_norm = np.zeros((10,13))
+
+for l in range(10):
+    for m in range(13):
+        total = s_win_win_split_array[l][m] + s_win_push_split_array[l][m] + s_push_push_split_array[l][m] + s_push_lose_split_array[l][m] + s_lose_lose_split_array[l][m]
+        s_ww_norm[l][m] = s_win_win_split_array[l][m]/total
+        s_wp_norm[l][m] = s_win_push_split_array[l][m]/total
+        s_pp_norm[l][m] = s_push_push_split_array[l][m]/total
+        s_lp_norm[l][m] = s_lose_push_split_array[l][m]/total
+        s_ll_norm[l][m] = s_lose_lose_split_array[l][m]/total
+        
+print(s_ww_norm)
+print(s_wp_norm)
+print(s_pp_norm)
+print(s_pl_norm)
+print(s_ll_norm)
+
+f3 = open('win_win_probs_split_stay.txt','w')
+f3.write("Probabilities of Winning-winning (rows represent pair of cards player split on (2-11), columns represent card dealer shows (A,2,...,K)" + '\n')
+for line in s_ww_norm:
+    for element in line:
+        string = str(element) + '\t'
+        f3.write(string)
+    f.write('\n')
+    
+g3 = open('win_push_probs_split_stay.txt','w')
+g3.write("Probabilities of winning-pushing (rows represent pair of cards player splits on (2-11), columns represent card dealer shows (A,2,...,K)" + '\n')
+for line in s_wp_norm:
+    for element in line:
+        string = str(element) + '\t'
+        g3.write(string)
+    f.write('\n')
+
+h3 = open('push_push_probs_split_stay.txt','w')
+h3.write("Probabilities of pushing-pushing (rows represent pair of cards player splits on (2-11), columns represent card dealer shows (A,2,...,K)" + '\n')
+for line in s_pp_norm:
+    for element in line:
+        string = str(element) + '\t'
+        h3.write(string)
+    h3.write('\n')
+    
+i3 = open('push_lose_probs_split_stay.txt','w')
+i3.write("Probabilities of pushing-losing (rows represent pair of cards player splits on (2-11), columns represent card dealer shows (A,2,...,K)" + '\n')
+for line in s_pl_norm:
+    for element in line:
+        string = str(element) + '\t'
+        i3.write(string)
+    i3.write('\n')
+    
+j3 = open('lose_lose_probs_split_stay.txt','w')
+j3.write("Probabilities of winning-pushing (rows represent pair of cards player splits on (2-11), columns represent card dealer shows (A,2,...,K)" + '\n')
+for line in s_ll_norm:
+    for element in line:
+        string = str(element) + '\t'
+        j3.write(string)
+    j3.write('\n')
