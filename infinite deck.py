@@ -1,4 +1,4 @@
-__author__ = 'miller'           #codebase authored by James Miller, Esq. 
+__author__ = 'miller'           #codebase authored by James Miller, Esq.
 
 import random                   #module containing several types of random number generators
 import numpy as np              #package for performing scientific computation in Python
@@ -7,12 +7,12 @@ import numpy as np              #package for performing scientific computation i
 #returns a variable 'card' for a value of n between 1 and 13
 #'ace' is a string; 2 through 10 are numeric
 #if/elif/else structure checks 'if' condition first, then 'elif' conditions in order, then 'else' condition last
-def deck(n):                                       
+def deck(n):
     if n not in range(14):                          #error checking for n not between 1 and 13
         print('number not in between 1 and 13')
     elif n == 1:                                    #defines card as 'ace' for n = 1
         card = 'ace'
-    elif n <= 10:                                   #defines card as n for 2 <= n <= 10 
+    elif n <= 10:                                   #defines card as n for 2 <= n <= 10
         card = n
     else:                                           #defines card as 10 for 11, 12, or 13 (J,Q,K)
         card = 10
@@ -51,7 +51,7 @@ def dealer_logic(hand):
     if total >= 17:                         #if 'total' is greater than or equal to 17, dealer must stay. return string 'stay' and numeric 'total'
         return ('stay',total)
     else:                                   #else ('total' is less than 17)
-        if soft == True:                        #if 'soft' is True(i.e., dealer has an ace) return string 'hitsoft' and numeric 'total' 
+        if soft == True:                        #if 'soft' is True(i.e., dealer has an ace) return string 'hitsoft' and numeric 'total'
             return ('hitsoft',total)
         else:                                   #else (dealer doesn't have an ace) return string 'hit' and numeric 'total'
             return ('hit',total)
@@ -62,13 +62,13 @@ def hit_soft_loop(total):
     card_total = total                          #'card_total' is a placeholder variable that takes the intial value of 'total'; it's the player's score
     randcard = deck(random.randint(1,13))       #'randcard' is a random value, either 'ace' or an integer from 2-10, resulting from calling deck()
     if randcard == 'ace':                       #if 'randcard' is an ace, increment 'card_total' by 1
-        card_total += 1                     
+        card_total += 1
     else:                                       #else increment 'card_total' by the value of 'randcard'
         card_total += randcard
     if card_total > 21:                         #if 'card_total' is greater than 21, the ace already in the hand takes a value of 1,
         return (card_total-10)                  #so return 10 less than 'card_total'
     elif card_total >= 17:                      #elif 'card_total' is >= 17 (and <= 21) return the straight up value of 'card_total'
-        return card_total       
+        return card_total
     else:                                       #else, iterate through the loop again
         return hit_soft_loop(card_total)
 
@@ -76,10 +76,10 @@ def hit_soft_loop(total):
 #continues to hit until the hand is between 17 and 21 inclusive, or a bust
 def hit_loop(total):
     card_total = total                          #'card_total' is a placeholder variable that takes the initial value of 'total'; it's the player's score
-    randcard = deck(random.randint(1,13))       #'randcard' is a random value, either 'ace' or an integer from 2-10, resulting from calling deck() 
+    randcard = deck(random.randint(1,13))       #'randcard' is a random value, either 'ace' or an integer from 2-10, resulting from calling deck()
     if randcard == 'ace':                       #check if 'randcard' is an ace. if so:
         if card_total > 10:                         #if 'card_total' is greater than 10, increment by 1
-            card_total += 1         
+            card_total += 1
             if 17 <= card_total <= 21:                  #if 'card_total' is between 17 and 21, inclusive, return 'card_total'
                 return card_total
             else:                                       #else iterate through hit_loop() again
@@ -111,10 +111,10 @@ def play_a_hand_dealer(hand):                   #'hand' is the dealer's hand
         return logic[1]
     elif logic[0] == 'hitsoft':                 #elif dealer has a soft hand and is required to hit, begin that process
         no_soft = hit_soft_loop(logic[1])           #call hit_soft_loop() on the current value of the hand and set it equal to new variable 'no_soft'
-        if no_soft >= 17:                           #if 'no_soft' is greater than or equal to 17, return 'no_soft' 
+        if no_soft >= 17:                           #if 'no_soft' is greater than or equal to 17, return 'no_soft'
             return no_soft
         else:                                       #else call hit_loop() on 'no_soft' and set it equal to new variable 'dealer'
-            dealer = hit_loop(no_soft)              
+            dealer = hit_loop(no_soft)
             return dealer                               #return 'dealer'
 
     else:                                       #else call hit_loop() on logic[1], which is the value of the hand
@@ -162,7 +162,7 @@ for row in trans_array:                 #iterates over each row in 'trans_array'
         j += 1                          #increment j by 1
     i += 1                          #increment i by 1
 
-print(normal_trans)                 #print the normalized array
+#print(normal_trans)                 #print the normalized array
 
 
 #The following produces tables that show the calculated probabilities of a player winning, pushing, and losing against the dealer.
@@ -170,11 +170,11 @@ print(normal_trans)                 #print the normalized array
 #The first section of code, through line 264, calculates the probabilities of winning, pushing, and losing when a player doesn't hit after the initial deal
 #and writes the results to separate .txt files
 
-#create three 18x13 arrays; one each to contain the probabilities of winning, pushing, and losing. Each array has 18 rows to account 
+#create three 18x13 arrays; one each to contain the probabilities of winning, pushing, and losing. Each array has 18 rows to account
 #for the 18 different possible scores, and 13 columns to account for the 13 possible cards to receive on a hit
-win_array = np.zeros((18,13))       
-push_array = np.zeros((18,13))
-lose_array = np.zeros((18,13))
+win_array = np.zeros((18, 13))
+push_array = np.zeros((18, 13))
+lose_array = np.zeros((18, 13))
 
 #Populate the win, push, and lose arrays with the number of instances of each occurence for every combination of player and
 #dealer hands
@@ -186,20 +186,20 @@ for i in range(18):             #controls the player scores
             if dealer_score == 'bust':      #if playing a hand causes the dealer to bust, set 'dealer_score' equal to 0
                 dealer_score = 0
             if (10 in dealer_hand) and ('ace' in dealer_hand):  #checks if dealer has blackjack
-                dealer_blackjack = True                             
+                dealer_blackjack = True
             else:
                 dealer_blackjack = False
-                
+
             if player_score == 21:                              #checks if player has blackjack
                 player_blackjack = True
             else:
                 player_blackjack = False
-                
+
         #runs through possible combinations of dealer and players having blackjack
             #if neither player nor dealer has blackjack, check who wins and increment the appropriate array by 1
-            if (dealer_blackjack == False) and (player_blackjack == False): 
-            
-                if player_score > dealer_score:     
+            if (dealer_blackjack == False) and (player_blackjack == False):
+
+                if player_score > dealer_score:
                     win_array[i][j] += 1
                 elif player_score == dealer_score:
                     push_array[i][j] += 1
@@ -208,7 +208,7 @@ for i in range(18):             #controls the player scores
             #elif player has blackjack but dealer doesn't, increment 'win_array' by 1
             elif (dealer_blackjack == False) and (player_blackjack == True):
                 win_array[i][j] += 1
-            #elif dealer has blackjack but player doesn't, increment 'lose_array' by 1    
+            #elif dealer has blackjack but player doesn't, increment 'lose_array' by 1
             elif (dealer_blackjack == True) and (player_blackjack == False):
                 lose_array[i][j] += 1
             #else (if player and dealer both have blackjack), increment 'push_array' by 1
@@ -220,9 +220,9 @@ for i in range(18):             #controls the player scores
 # print(lose_array)
 
 #creates framework for normalized win, lose, and push arrays
-win_norm = np.zeros((18,13))
-push_norm = np.zeros((18,13))
-lose_norm = np.zeros((18,13))
+win_norm = np.zeros((18, 13))
+push_norm = np.zeros((18, 13))
+lose_norm = np.zeros((18, 13))
 
 #calculate the sum of the possible outcomes (win, push, lose) in each array. Divide each element by the sum of its row to normalize the arrays
 for l in range(18):         #l corresponds to each row in the arrays
@@ -233,9 +233,9 @@ for l in range(18):         #l corresponds to each row in the arrays
         lose_norm[l][m] = lose_array[l][m]/total                    #calculate probability of losing at position [l][m]
 
 #print the normalized arrays
-print(win_norm) 
-print(push_norm)
-print(lose_norm)
+#print(win_norm)
+#print(push_norm)
+#print(lose_norm)
 
 #the next several blocks of code write the arrays to .txt files
 f = open('win_probs_no_hit.txt','w')
@@ -262,45 +262,57 @@ for line in lose_norm:
         h.write(string)
     h.write('\n')
 
-#Next section of code calculates the probabilities of winning, pushing, and losing when a player hits on his hand and writes the results to separate .txt files    
-cards_under = [1,2,3,4,5,6,7,8,9,10,10,10,10] #array representing possible cards for a player to have, treating an ace as a 1 (so player's current hand is >= 11)
-cards_over = [11,2,3,4,5,6,7,8,9,10,10,10,10] #array representing possible cards for a player to have, treating an ace as an 11 (so player's current hand is < 11)
+#Next section of code calculates the probabilities of winning, pushing, and losing when a player hits on his hand and writes the results to separate .txt files
+cards_under = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] #array representing possible cards for a player to have, treating an ace as a 1 (so player's current hand is >= 11)
+cards_over = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10] #array representing possible cards for a player to have, treating an ace as an 11 (so player's current hand is < 11)
 
-#create three 18x13 arrays; one each to contain the probabilities of winning, pushing, and losing after a player hits. 
+#create three 18x13 arrays; one each to contain the probabilities of winning, pushing, and losing after a player hits.
 #Each array has 18 rows to account for the 18 different possible scores, and 13 columns to account for the 13 possible cards to receive on a hit
-win_hit_array = np.zeros((18,13))
-push_hit_array = np.zeros((18,13))
-lose_hit_array = np.zeros((18,13))
+win_hit_array = np.zeros((18, 13))
+push_hit_array = np.zeros((18, 13))
+lose_hit_array = np.zeros((18, 13))
 
 #for any hand under 11, calculates the probability of winning, pushing, losing if the player hits
-for i in (4,5,6,7,8,9,10):                                      #all possible hands less than 11
-    for card in cards_over:                                     
-        new_total = i+card                                      #new total after simulated hit
-        #the [i-4] adjusts to match i with appropriate row in the array. Multiplies current entry at [new_total-4] of each normalized array 
-        #by 1/13 to generate new probabilities of winning, pushing, and losing
-        win_hit_array[i-4] += (1/13)*win_norm[new_total-4]       
-        push_hit_array[i-4] += (1/13)*push_norm[new_total-4]
-        lose_hit_array[i-4] += (1/13)*lose_norm[new_total-4]
+for i in (4, 5, 6, 7, 8, 9, 10):                                      #all possible hands less than 11
+    for j in range(13):
+        for card in cards_over:
+            new_total = i+card                                      #new total after simulated hit
+            #the [i-4] adjusts to match i with appropriate row in the array. Multiplies current entry at [new_total-4] of each normalized array
+            #by 0.077 to generate new probabilities of winning, pushing, and losing
+            if card != 10:
+                win_hit_array[i-4][j] += (0.077)*(win_norm[i-4][j])
+                push_hit_array[i-4][j] += (0.077)*(push_norm[i-4][j])
+                lose_hit_array[i-4][j] += (0.077)*(lose_norm[i-4][j])
+            else:
+                win_hit_array[i-4][j] += (0.308)*(win_norm[i-4][j])
+                push_hit_array[i-4][j] += (0.308)*(push_norm[i-4][j])
+                lose_hit_array[i-4][j] += (0.308)*(lose_norm[i-4][j])
 
 #for any hand over 11, calculates the probability of winning, pushing, losing if the player hits
 for i in (11,12,13,14,15,16,17,18,19,20,21):                    #all possible hands 11 or higher
-    for card in cards_under:
-        new_total = i+card                                      #new total after simulated hit
-        #if 'new_total' isn't a bust, multiply current entry at [new_total - 4] of each normalized array by 1/13 to generate new probabilities
-        #of winning, pushing, losing
-        if new_total <= 21:
-            win_hit_array[i-4] += (1/13)*win_norm[new_total-4]
-            push_hit_array[i-4] += (1/13)*push_norm[new_total-4]
-            lose_hit_array[i-4] += (1/13)*lose_norm[new_total-4]
-        #else (if 'new_total' is a bust), don't change 'win_hit_array' or 'push_hit_array', and increment 'lose_hit_aray' by 1/13
-        else:
-            win_hit_array[i-4] += 0
-            push_hit_array[i-4] += 0
-            lose_hit_array[i-4] += (1/13)
+    for j in range(13):
+        for card in cards_under:
+            new_total = i+card                                      #new total after simulated hit
+            #if 'new_total' isn't a bust, multiply current entry at [new_total - 4] of each normalized array by 0.077 to generate new probabilities
+            #of winning, pushing, losing
+            if new_total <= 21:
+                if card != 10:
+                    win_hit_array[i-4][j] += (0.077)*(win_norm[i-4][j])
+                    push_hit_array[i-4][j] += (0.077)*(push_norm[i-4][j])
+                    lose_hit_array[i-4][j] += (0.077)*(lose_norm[i-4][j])
+                else:
+                    win_hit_array[i-4][j] += (0.308)*(win_norm[i-4][j])
+                    push_hit_array[i-4][j] += (0.308)*(push_norm[i-4][j])
+                    lose_hit_array[i-4][j] += (0.308)*(lose_norm[i-4][j])
+            #else (if 'new_total' is a bust), don't change 'win_hit_array' or 'push_hit_array', and increment 'lose_hit_aray' by 0.077
+            else:
+                win_hit_array[i-4][j] += 0
+                push_hit_array[i-4][j] += 0
+                lose_hit_array[i-4][j] += (0.077)
 
-# print(win_hit_array)
-# print(push_hit_array)
-# print(lose_hit_array)
+#print(win_hit_array)
+#print(push_hit_array)
+#print(lose_hit_array)
 
 #Writes each '<result>_hit_array' to a .txt file
 f2 = open('win_probs_hit.txt','w')
@@ -329,9 +341,9 @@ for line in lose_hit_array:
 
 #Next section calculates probabilities of winning, pushing, and losing if a player splits his hand.
 #A player can split his hand when they are dealt two of the same card at the start of the hand. The player then has two separate hands,
-#and receives a card on top of each of the split cards. The player then plays each hand like a normal hand. 
+#and receives a card on top of each of the split cards. The player then plays each hand like a normal hand.
 #If a player splits on a pair of aces, they only receive one additional card per ace, so each ace is an 11 by defaul.
-#Should a player split their cards and receive another of the same card on either split hand, the player may split again, and 
+#Should a player split their cards and receive another of the same card on either split hand, the player may split again, and
 #continue to split as long as they keep receiving the same card.
 
 s_win_win_split_array = np.zeros((10,13))
@@ -340,25 +352,27 @@ s_push_push_split_array = np.zeros((10,13))
 s_push_lose_split_array = np.zeros((10,13))
 s_lose_lose_split_array = np.zeros((10,13))
 
+
 for i in (2,3,4,5,6,7,8,9,10,11):                      #10 cards from 2 to ace (as 11)
     for j in range(13):                                #controls dealer score
         for k in range(10000):
-            player_score_1 = i+deck(random.randint(1,13))
-            player_score_2 = i+deck(random.randint(1,13))
+            player_score_1 = [i,deck(random.randint(1,13))]
+            player_score_2 = [i,deck(random.randint(1,13))]
             dealer_score = play_a_hand_dealer([deck(j+1),deck(random.randint(1,13))])
             if (10 in dealer_hand) and ('ace' in dealer_hand):
-                dealer_blackjack == True
+                dealer_blackjack = True
             else:
-                dealer_blackjack == False
+                dealer_blackjack = False
             if player_score_1 == 21:
-                player_blackjack_1 == True
+                player_blackjack_1 = True
             else:
-                player_blackjack_1 == False
+                player_blackjack_1 = False
             if player_score_2 == 21:
-                player_blackjack_2 == True
+                player_blackjack_2 = True
             else:
-                player_blackjack_2 == False
+                player_blackjack_2 = False
             if (dealer_blackjack == False) and ((player_blackjack_1 == False) and (player_blackjack_2 == False)):
+                print(1)
                 if (player_score_1 > dealer_score) and (player_score_2 > dealer_score):
                     s_win_win_split_array[i-2][j] += 1
                 elif ((player_score_1 > dealer_score) and (player_score_2 == dealer_score)) or ((player_score_1 == dealer_score) and (player_score_2 > dealer_score)):
@@ -370,19 +384,21 @@ for i in (2,3,4,5,6,7,8,9,10,11):                      #10 cards from 2 to ace (
                 else:
                     s_lose_lose_split_array[i-2][j] += 1
             elif (dealer_blackjack == False) and ((player_blackjack_1 == True) and (player_blackjack_2 == False)):
+                print(2)
                 if player_score_2 > dealer_score:
                     s_win_win_split_array[i-2][j] += 1
                 elif player_score_2 == dealer_score:
-                    s_win_push_array[i-2][j] += 1
+                    s_win_push_split_array[i-2][j] += 1
                 else:
-                    s_push_push_array[i-2][j] += 1
+                    s_push_push_split_array[i-2][j] += 1
             elif (dealer_blackjack == False) and ((player_blackjack_1 == False) and (player_blackjack_2 == True)):
+                print(3)
                 if player_score_1 > dealer_score:
                     s_win_win_split_array[i-2][j] += 1
                 elif player_score_1 == dealer_score:
-                    s_win_push_array[i-2][j] += 1
+                    s_win_push_split_array[i-2][j] += 1
                 else:
-                    s_push_push_array[i-2][j] += 1                
+                    s_push_push_split_array[i-2][j] += 1
             elif (dealer_blackjack == False) and ((player_blackjack_1 == True) and (player_blackjack_2 == True)):
                 s_win_win_split_array[i-2][j] += 1
             elif (dealer_blackjack == True) and ((player_blackjack_1 == False) and (player_blackjack_2 == False)):
@@ -393,7 +409,7 @@ for i in (2,3,4,5,6,7,8,9,10,11):                      #10 cards from 2 to ace (
                 s_push_lose_split_array[i-2][j] += 1
             else:
                 s_push_push_split_array[i-2][j] += 1
-                
+
 s_ww_norm = np.zeros((10,13))
 s_wp_norm = np.zeros((10,13))
 s_pp_norm = np.zeros((10,13))
@@ -406,51 +422,51 @@ for l in range(10):
         s_ww_norm[l][m] = s_win_win_split_array[l][m]/total
         s_wp_norm[l][m] = s_win_push_split_array[l][m]/total
         s_pp_norm[l][m] = s_push_push_split_array[l][m]/total
-        s_lp_norm[l][m] = s_lose_push_split_array[l][m]/total
+        s_pl_norm[l][m] = s_push_lose_split_array[l][m]/total
         s_ll_norm[l][m] = s_lose_lose_split_array[l][m]/total
-        
+
 print(s_ww_norm)
-print(s_wp_norm)
-print(s_pp_norm)
-print(s_pl_norm)
-print(s_ll_norm)
+#print(s_wp_norm)
+#print(s_pp_norm)
+#print(s_pl_norm)
+#print(s_ll_norm)
 
 f3 = open('win_win_probs_split_stay.txt','w')
 f3.write("Probabilities of Winning-winning (rows represent pair of cards player split on (2-11), columns represent card dealer shows (A,2,...,K)" + '\n')
 for line in s_ww_norm:
     for element in line:
-        string = str(element) + '\t'
+        string = str(element) +'\t'
         f3.write(string)
-    f.write('\n')
-    
+    f3.write('\n')
+
 g3 = open('win_push_probs_split_stay.txt','w')
 g3.write("Probabilities of winning-pushing (rows represent pair of cards player splits on (2-11), columns represent card dealer shows (A,2,...,K)" + '\n')
 for line in s_wp_norm:
     for element in line:
         string = str(element) + '\t'
         g3.write(string)
-    f.write('\n')
+    g3.write('\n')
 
 h3 = open('push_push_probs_split_stay.txt','w')
-h3.write("Probabilities of pushing-pushing (rows represent pair of cards player splits on (2-11), columns represent card dealer shows (A,2,...,K)" + '\n')
+h3.write("Probabilities of pushing-pushing (rows represent pair of cards player splits on (2-11), columns represent card dealer shows (A,2,...,K)" +'\n')
 for line in s_pp_norm:
     for element in line:
-        string = str(element) + '\t'
+        string = str(element) +'\t'
         h3.write(string)
     h3.write('\n')
-    
+
 i3 = open('push_lose_probs_split_stay.txt','w')
-i3.write("Probabilities of pushing-losing (rows represent pair of cards player splits on (2-11), columns represent card dealer shows (A,2,...,K)" + '\n')
+i3.write("Probabilities of pushing-losing (rows represent pair of cards player splits on (2-11), columns represent card dealer shows (A,2,...,K)" +'\n')
 for line in s_pl_norm:
     for element in line:
-        string = str(element) + '\t'
+        string = str(element) +'\t'
         i3.write(string)
     i3.write('\n')
-    
+
 j3 = open('lose_lose_probs_split_stay.txt','w')
-j3.write("Probabilities of winning-pushing (rows represent pair of cards player splits on (2-11), columns represent card dealer shows (A,2,...,K)" + '\n')
+j3.write("Probabilities of winning-pushing (rows represent pair of cards player splits on (2-11), columns represent card dealer shows (A,2,...,K)" +'\n')
 for line in s_ll_norm:
     for element in line:
-        string = str(element) + '\t'
+        string = str(element) +'\t'
         j3.write(string)
     j3.write('\n')
